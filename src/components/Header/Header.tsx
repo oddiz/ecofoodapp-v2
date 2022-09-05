@@ -2,7 +2,7 @@ import { Search } from "./Search";
 
 export const Header = () => {
     return (
-        <header className="w-full h-24 dark:bg-primarydark-650 flex flex-row py-5 px-5">
+        <header className="flex h-24 w-full flex-row border-b-[1px] py-5 px-5 dark:border-b-primarydark-500 dark:bg-primarydark-650">
             <Search />
         </header>
     );

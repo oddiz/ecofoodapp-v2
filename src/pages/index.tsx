@@ -11,9 +11,9 @@ const Home: NextPage = () => {
                 <title>Eco Food App</title>
             </Head>
 
-            <main className="dark:bg-primarydark-600 bg-primary-100 w-screen h-screen flex flex-row">
+            <main className="flex h-screen w-screen flex-row bg-primary-100 dark:bg-primarydark-600">
                 <Navigator />
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-1 flex-col">
                     <Header />
                     <IndexContent />
                 </div>

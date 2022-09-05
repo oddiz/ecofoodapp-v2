@@ -23,3 +23,12 @@ a {
   body {
   }
 }
+kbd {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    margin: 0 2px;
+    padding: 2px;
+    min-width: 16px;
+    text-align: center;
+}

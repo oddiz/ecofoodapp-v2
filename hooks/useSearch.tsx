@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
 
 export type ContextData = {
@@ -18,6 +17,5 @@ export const useSearch = () => {
 
 export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
     const [searchInput, setSearchInput] = useState("");
-
     return <SearchContext.Provider value={{ searchInput, setSearchInput }}>{children}</SearchContext.Provider>;
 };

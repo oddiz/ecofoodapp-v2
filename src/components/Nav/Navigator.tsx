@@ -2,14 +2,37 @@ import { TbMeat } from "react-icons/tb";
 import { NavItem } from "./NavItem";
 import { IoStorefrontSharp, IoHeart } from "react-icons/io5";
 import Image from "next/image";
+import { useState } from "react";
 
 export const Navigator: React.FC = () => {
+    console.log("rendered");
+    const navItems = [
+        {
+            id: "home",
+            icon: <TbMeat size={24} />,
+            link: "/",
+        },
+        {
+            id: "shops",
+            icon: <IoStorefrontSharp size={24} />,
+            link: "/shop",
+        },
+        {
+            id: "taste",
+            icon: <IoHeart size={24} />,
+            link: "/taste",
+        },
+    ];
+    const [activePage, setActivePage] = useState("home");
+
     const handleNavItemClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        console.log(e.currentTarget);
+        //find index of clicked item
+        navItems.findIndex((item) => item.id === e.currentTarget.id) ?? setActivePage(e.currentTarget.id);
     };
+
     return (
-        <div className="dark:bg-primarydark-700 w-24 h-full flex-grow-0 flex-shrink-0 ">
-            <div className="w-full h-24 flex flex-col  mb-12 relative p-5">
+        <div className="h-full w-24 flex-shrink-0 flex-grow-0 dark:bg-primarydark-700 ">
+            <div className="relative mb-12 flex h-24  w-full flex-col p-5">
                 <Image
                     src="/logo.png"
                     alt="Eco Food App"
@@ -21,7 +44,7 @@ export const Navigator: React.FC = () => {
             </div>
             <div
                 id="Navitems"
-                className="flex flex-col flex-grow-1 flex-shrink-1 "
+                className="flex-grow-1 flex-shrink-1 flex flex-col "
             >
                 <NavItem
                     icon={
