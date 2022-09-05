@@ -2,13 +2,16 @@ export const NavItem = ({
     icon,
     active,
     onClickHandler,
+    id,
 }: {
     icon: JSX.Element;
     active: boolean;
     onClickHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    id: string;
 }) => {
     return (
         <div
+            id={id}
             className={`peer relative flex h-20 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg ${
                 active
                     ? "border-t-[1px] border-t-primarydark-400 bg-primary-300 text-primary-150 dark:bg-primarydark-900"

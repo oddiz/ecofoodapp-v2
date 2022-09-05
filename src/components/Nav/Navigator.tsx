@@ -26,8 +26,8 @@ export const Navigator: React.FC = () => {
     const [activePage, setActivePage] = useState("home");
 
     const handleNavItemClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        //find index of clicked item
-        navItems.findIndex((item) => item.id === e.currentTarget.id) ?? setActivePage(e.currentTarget.id);
+        const itemExists = navItems.some((item) => item.id === e.currentTarget.id);
+        if (itemExists) setActivePage(e.currentTarget.id);
     };
 
     return (
@@ -46,37 +46,15 @@ export const Navigator: React.FC = () => {
                 id="Navitems"
                 className="flex-grow-1 flex-shrink-1 flex flex-col "
             >
-                <NavItem
-                    icon={
-                        <TbMeat
-                            className="rotate-180"
-                            clip="true"
-                            size={32}
-                        />
-                    }
-                    onClickHandler={handleNavItemClick}
-                    active={true}
-                />
-                <NavItem
-                    icon={
-                        <IoStorefrontSharp
-                            clip="true"
-                            size={32}
-                        />
-                    }
-                    onClickHandler={handleNavItemClick}
-                    active={false}
-                />
-                <NavItem
-                    icon={
-                        <IoHeart
-                            clip="true"
-                            size={32}
-                        />
-                    }
-                    onClickHandler={handleNavItemClick}
-                    active={false}
-                />
+                {navItems.map((item) => (
+                    <NavItem
+                        key={item.id}
+                        id={item.id}
+                        icon={item.icon}
+                        active={item.id === activePage}
+                        onClickHandler={handleNavItemClick}
+                    />
+                ))}
             </div>
         </div>
     );
