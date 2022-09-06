@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState } from "react";
 
 export const Navigator: React.FC = () => {
-    console.log("rendered");
     const navItems = [
         {
             id: "home",
