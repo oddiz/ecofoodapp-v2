@@ -32,7 +32,7 @@ class MyDocument extends Document {
                         href="/favicon.ico"
                     />
                 </Head>
-                <body className="h-screen w-screen">
+                <body className="h-screen w-screen max-w-full">
                     <Main />
                     <NextScript />
                 </body>

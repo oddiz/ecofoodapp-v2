@@ -1,7 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import Image from "next/image";
-import { Fragment, useState } from "react";
-import { ImGithub } from "react-icons/im";
+import { Fragment } from "react";
 import { FaDiscord, FaGoogle } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";

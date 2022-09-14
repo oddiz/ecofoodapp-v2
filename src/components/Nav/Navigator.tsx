@@ -3,6 +3,8 @@ import { NavItem } from "./NavItem";
 import { IoStorefrontSharp, IoHeart } from "react-icons/io5";
 import Image from "next/image";
 import { useState } from "react";
+import { useNavigator } from "hooks/useNavigator";
+import Link from "next/link";
 
 export const Navigator: React.FC = () => {
     const navItems = [
@@ -14,7 +16,7 @@ export const Navigator: React.FC = () => {
         {
             id: "shops",
             icon: <IoStorefrontSharp size={24} />,
-            link: "/shop",
+            link: "/shops",
         },
         {
             id: "taste",
@@ -22,7 +24,7 @@ export const Navigator: React.FC = () => {
             link: "/taste",
         },
     ];
-    const [activePage, setActivePage] = useState("home");
+    const { activePage, setActivePage } = useNavigator();
 
     const handleNavItemClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const itemExists = navItems.some((item) => item.id === e.currentTarget.id);
@@ -46,13 +48,19 @@ export const Navigator: React.FC = () => {
                 className="flex-grow-1 flex-shrink-1 flex flex-col "
             >
                 {navItems.map((item) => (
-                    <NavItem
+                    <Link
+                        href={item.link}
                         key={item.id}
-                        id={item.id}
-                        icon={item.icon}
-                        active={item.id === activePage}
-                        onClickHandler={handleNavItemClick}
-                    />
+                    >
+                        <a>
+                            <NavItem
+                                id={item.id}
+                                icon={item.icon}
+                                active={item.id === activePage}
+                                onClickHandler={handleNavItemClick}
+                            />
+                        </a>
+                    </Link>
                 ))}
             </div>
         </div>

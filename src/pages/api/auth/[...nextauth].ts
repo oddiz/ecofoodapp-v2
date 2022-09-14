@@ -1,22 +1,29 @@
 import { PrismaClient } from "@prisma/client";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import DiscordProvider from "next-auth/providers/discord";
-import Auth0Provider from "next-auth/providers/auth0";
-
+import { env } from "@/env/server.mjs";
 const prisma = new PrismaClient();
-export default NextAuth({
+
+export const authOptions: NextAuthOptions = {
+    callbacks: {
+        session({ session, user }) {
+            if (session.user) {
+                session.user.id = user.id;
+            }
+            return session;
+        },
+    },
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            clientId: env.GOOGLE_CLIENT_ID as string,
+            clientSecret: env.GOOGLE_CLIENT_SECRET as string,
         }),
         DiscordProvider({
-            clientId: process.env.DISCORD_CLIENT_ID as string,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+            clientId: env.DISCORD_CLIENT_ID as string,
+            clientSecret: env.DISCORD_CLIENT_SECRET as string,
         }),
     ],
     pages: {
@@ -24,4 +31,6 @@ export default NextAuth({
 
         error: "/",
     },
-});
+};
+
+export default NextAuth(authOptions);

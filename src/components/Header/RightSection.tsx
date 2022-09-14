@@ -5,26 +5,20 @@ import { SignInModal } from "../SignInModal";
 import { useRouter } from "next/router";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
+import { useNavigator } from "hooks/useNavigator";
 
 export const RightSection = () => {
     const { status, data: session } = useSession();
 
     const router = useRouter();
-    const { error } = router.query;
+    const { setActivePage } = useNavigator();
     const [showSignIn, setShowSignIn] = useState(false);
-    const onCloseHandler = () => {
-        setShowSignIn(false);
-        router.push("/", undefined, { shallow: true });
+
+    const userLinkClicked = () => {
+        console.log("user link clicked");
+        router.push("/user", undefined, { shallow: true });
+        setActivePage("user");
     };
-    if ((showSignIn || error) && !session) {
-        return (
-            <SignInModal
-                onCloseHandler={onCloseHandler}
-                isOpen={showSignIn || !!error}
-                error={error}
-            />
-        );
-    }
 
     if (status === "loading") {
         return <RightSectionSkeleton />;
@@ -63,31 +57,30 @@ export const RightSection = () => {
                         <Menu.Items className="absolute top-10 right-0 flex w-44 flex-col rounded-lg">
                             <div className="h-8 w-full rounded-t-lg border-b-[1px] border-b-primarydark-100 bg-primarydark-300" />
                             <Menu.Item>
-                                <Link href="/user">
-                                    <div className="flex h-10 cursor-pointer items-center justify-center  bg-primarydark-400 px-4 py-2 text-sm font-light hover:bg-primarydark-300">
-                                        Change Username
-                                    </div>
-                                </Link>
+                                <button
+                                    onClick={userLinkClicked}
+                                    className="flex h-10 cursor-pointer items-center justify-center  bg-primarydark-400 px-4 py-2 text-sm font-light hover:bg-primarydark-300"
+                                >
+                                    Change Username
+                                </button>
                             </Menu.Item>
                             <Menu.Item>
-                                <Link href="/api/auth/signout">
-                                    <div className="flex h-10 cursor-pointer items-center justify-center rounded-b-lg border-t-2 border-t-ecored-600 bg-ecored-600/80 px-4 py-2 text-center hover:bg-ecored-500">
-                                        Log out
-                                    </div>
-                                </Link>
+                                <button
+                                    onClick={() => signOut()}
+                                    className="flex h-10 cursor-pointer items-center justify-center rounded-b-lg border-t-2 border-t-ecored-600 bg-ecored-600/80 px-4 py-2 text-center hover:bg-ecored-500"
+                                >
+                                    Log out
+                                </button>
                             </Menu.Item>
                         </Menu.Items>
                     </Transition>
                 </Menu>
             ) : (
-                <button
-                    onClick={() => {
-                        setShowSignIn(true);
-                    }}
-                    className=" h-10 w-24 rounded border-2 border-secondary-800 text-center font-mono font-extralight hover:brightness-110  dark:text-secondary-200"
-                >
-                    Sign In
-                </button>
+                <Link href={"/signin"}>
+                    <button className=" h-10 w-24 rounded border-2 border-secondary-800 text-center font-mono font-extralight hover:brightness-110  dark:text-secondary-200">
+                        Sign In
+                    </button>
+                </Link>
             )}
         </div>
     );

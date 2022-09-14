@@ -32,3 +32,27 @@ kbd {
     min-width: 16px;
     text-align: center;
 }
+
+#foods_section svg {
+    overflow: visible;
+}
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+        width: 5px;
+        height: 20px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        border-radius: 100vh;
+        background: #222230;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        background: #282839;
+        border-radius: 100vh;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #282839;
+    }
+}
