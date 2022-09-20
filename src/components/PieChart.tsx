@@ -1,5 +1,6 @@
 import { Food } from "@/types/food";
 import { ResponsivePie } from "@nivo/pie";
+import { animated } from "@react-spring/web";
 
 export const PieChartFromFood = ({
     food,
@@ -14,13 +15,34 @@ export const PieChartFromFood = ({
         { id: "carbs", label: "Carbs", value: food.carb, color: "#dc4817" },
         { id: "proteins", label: "Protein", value: food.pro, color: "#c88911" },
         { id: "fat", label: "Fat", value: food.fat, color: "#ffd21c" },
-        { id: "vitamins", label: "Vitamins", value: food.vit, color: "#7a9818" },
+        { id: "vitamin", label: "Vitamin", value: food.vit, color: "#7a9818" },
     ];
+
+    const totalNutrients = food.carb + food.fat + food.pro + food.vit;
+    const CenteredMetric = ({ dataWithArc, centerX, centerY }: any) => {
+        return (
+            <g className="h-96 w-96 bg-white">
+                {labels && (
+                    <text
+                        x={centerX - 0.5}
+                        y={centerY}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        className=" font-base  "
+                        fill="#fff"
+                    >
+                        {totalNutrients}
+                    </text>
+                )}
+            </g>
+        );
+    };
 
     return (
         <ResponsivePie
             data={data}
-            innerRadius={0}
+            layers={["arcs", "arcLabels", "arcLinkLabels", "legends", CenteredMetric]}
+            innerRadius={labels ? 0.3 : 0}
             padAngle={0.7}
             cornerRadius={0}
             isInteractive={interactive}
@@ -31,12 +53,43 @@ export const PieChartFromFood = ({
                 modifiers: [["darker", 0.2]],
             }}
             enableArcLabels={labels}
+            arcLabelsRadiusOffset={0.55}
+            arcLabelsSkipAngle={30}
             enableArcLinkLabels={false}
-            arcLabelsSkipAngle={10}
             arcLabelsTextColor={{
                 from: "color",
                 modifiers: [["darker", 2]],
             }}
+            motionConfig="stiff"
+            arcLabelsComponent={({ datum, label, style }) => (
+                <animated.g
+                    transform={style.transform}
+                    style={{ pointerEvents: "none" }}
+                >
+                    <circle
+                        fill={style.textColor}
+                        cy={6}
+                        r={9}
+                    />
+                    <circle
+                        fill="#ffffff"
+                        stroke={datum.color}
+                        strokeWidth={2}
+                        r={10}
+                    />
+                    <text
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fill={style.textColor}
+                        style={{
+                            fontSize: 8,
+                            fontWeight: 800,
+                        }}
+                    >
+                        {label}
+                    </text>
+                </animated.g>
+            )}
             defs={[
                 {
                     id: "dots",
@@ -80,7 +133,7 @@ export const PieChartFromFood = ({
                 },
                 {
                     match: {
-                        id: "vitamins",
+                        id: "vitamin",
                     },
                     id: "lines",
                 },
@@ -89,7 +142,7 @@ export const PieChartFromFood = ({
     );
 };
 
-const ChartTooltip = ({ datum: { id, value, color } }: any) => {
+const ChartTooltip = ({ datum: { label, value, color } }: any) => {
     return (
         <div
             style={{
@@ -102,7 +155,7 @@ const ChartTooltip = ({ datum: { id, value, color } }: any) => {
             }}
         >
             <strong>
-                {id}: {value}
+                {label}: {value}
             </strong>
         </div>
     );

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Cubano';;
+    src: url("/fonts/Cubano.woff2") format("woff2");
+}
+
 html,
 body {
   padding: 0;
@@ -38,6 +43,7 @@ kbd {
 }
 @layer utilities {
     .scrollbar::-webkit-scrollbar {
+        position:absolute;
         width: 5px;
         height: 20px;
     }
@@ -54,5 +60,18 @@ kbd {
 
     .scrollbar::-webkit-scrollbar-thumb:hover {
         background: #282839;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
     }
 }

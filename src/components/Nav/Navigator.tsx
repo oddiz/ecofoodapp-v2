@@ -10,16 +10,19 @@ export const Navigator: React.FC = () => {
     const navItems = [
         {
             id: "home",
+            label: "Home",
             icon: <TbMeat size={24} />,
             link: "/",
         },
         {
             id: "shops",
+            label: "Shops",
             icon: <IoStorefrontSharp size={24} />,
             link: "/shops",
         },
         {
             id: "taste",
+            label: "Taste",
             icon: <IoHeart size={24} />,
             link: "/taste",
         },
@@ -56,6 +59,7 @@ export const Navigator: React.FC = () => {
                             <NavItem
                                 id={item.id}
                                 icon={item.icon}
+                                label={item.label}
                                 active={item.id === activePage}
                                 onClickHandler={handleNavItemClick}
                             />

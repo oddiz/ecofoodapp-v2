@@ -1,5 +1,7 @@
+import { Food } from "@/types/food";
+
 // 9.5
-module.exports = [
+export const allFoods: Food[] = [
     {
         id: 12,
         name: "Fried Tomatoes",
@@ -992,7 +994,7 @@ module.exports = [
     {
         id: 41,
         name: "Basic Salad",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 18,
         pro: 6,
@@ -1005,7 +1007,7 @@ module.exports = [
     {
         id: 42,
         name: "Fruit Salad",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 12,
         pro: 4,
@@ -1018,7 +1020,7 @@ module.exports = [
     {
         id: 43,
         name: "Vegetable Stock",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 11,
         pro: 1,
@@ -1031,7 +1033,7 @@ module.exports = [
     {
         id: 44,
         name: "Vegetable Soup",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 12,
         pro: 4,
@@ -1044,7 +1046,7 @@ module.exports = [
     {
         id: 45,
         name: "Simmered Meat",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 6,
         pro: 18,
@@ -1057,7 +1059,7 @@ module.exports = [
     {
         id: 47,
         name: "Crispy Bacon",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 0,
         pro: 18,
@@ -1070,7 +1072,7 @@ module.exports = [
     {
         id: 48,
         name: "Vegetable Medley",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 8,
         pro: 4,
@@ -1083,7 +1085,7 @@ module.exports = [
     {
         id: 49,
         name: "Autumn Stew",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 13,
         pro: 8,
@@ -1096,7 +1098,7 @@ module.exports = [
     {
         id: 410,
         name: "Clam Chowder",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 21,
         pro: 15,
@@ -1109,7 +1111,7 @@ module.exports = [
     {
         id: 411,
         name: "Loaded Taro Fries",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 14,
         pro: 6,
@@ -1122,7 +1124,7 @@ module.exports = [
     {
         id: 412,
         name: "Mochi",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 25,
         pro: 0,
@@ -1135,7 +1137,7 @@ module.exports = [
     {
         id: 413,
         name: "Phad Thai",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 9,
         pro: 13,
@@ -1148,7 +1150,7 @@ module.exports = [
     {
         id: 414,
         name: "Pupusas",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 6,
         pro: 11,
@@ -1161,7 +1163,7 @@ module.exports = [
     {
         id: 415,
         name: "Rice Noodles",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 2,
         carb: 10,
         pro: 0,
@@ -1174,7 +1176,7 @@ module.exports = [
     {
         id: 416,
         name: "Shark Fillet Soup",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 10,
         pro: 17,
@@ -1187,7 +1189,7 @@ module.exports = [
     {
         id: 417,
         name: "Smooth Gut Noodle Roll",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 19,
         pro: 15,
@@ -1200,7 +1202,7 @@ module.exports = [
     {
         id: 418,
         name: "Taro Fries",
-        type: "Cast iron stove",
+        type: "Cast Iron Stove",
         tier: 3,
         carb: 10,
         pro: 2,
