@@ -25,14 +25,18 @@ export type IFoods = {
     stomach: Food[];
 };
 export type ITastePref = Map<Food["id"], number>;
+
+export type CalculateParameters = {
+    foods: IFoods;
+    filters: IFilters;
+    taste: ITastePref;
+    menuSize: number;
+    calculateType: "definitive" | "random";
+};
 export type StartWorkerMessage = {
     origin: string;
     message: "start_worker";
-    foods: IFoods;
-    filters: IFilters;
-    tastePreference: ITastePref;
-};
-
+} & CalculateParameters;
 export type CalculateSPResult = {
     sp: number;
     foods: {
@@ -66,7 +70,13 @@ export type IBestMenus = {
     worker: IBestMenu | null; // best cal per dollar menu
     student: IBestMenu | null; // best sp per dollar menu
 };
-export type IBestMenuMessage = {
-    op: "best_menu_update";
-    data: IBestMenus;
+export type IBestMenusMessage = {
+    op: "best_menus_update";
+    result: IBestMenus;
 };
+
+export type ICalculationEndMessage = {
+    op: "calculation_end";
+};
+
+export type ICalcWorkerMessage = IBestMenusMessage | ICalculationEndMessage;

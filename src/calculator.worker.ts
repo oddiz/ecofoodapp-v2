@@ -1,11 +1,11 @@
-import { CalculateSPResult, Food, IBestMenuMessage, IBestMenus, StartWorkerMessage } from "@/types/food";
+import { CalculateSPResult, Food, IBestMenusMessage, IBestMenus, StartWorkerMessage } from "@/types/food";
 import { menuNotValid, menuValid } from "./utils/checkMenuFilters";
 import { generateRandomMenu } from "./utils/generateRandomMenu";
 import getDefinitiveIterCount from "./utils/getDefinitiveIterCount";
 import { processBestMenus } from "./utils/processBestMenus";
 
 onmessage = function (e: MessageEvent<StartWorkerMessage>) {
-    if (e.origin !== "ecoFood") {
+    if (e.origin !== "main") {
         console.log("e.origin is not ecoFood, it is: " + e.origin);
         return;
     }
@@ -14,7 +14,7 @@ onmessage = function (e: MessageEvent<StartWorkerMessage>) {
     testMenuWorker(e.data);
 };
 
-function testMenuWorker({ foods, filters, tastePreference }: StartWorkerMessage, option?: string) {
+function testMenuWorker({ foods, filters, taste, calculateType }: StartWorkerMessage) {
     console.time("Total_calculation_time");
 
     //randomizes and tests the active menu array
@@ -29,7 +29,7 @@ function testMenuWorker({ foods, filters, tastePreference }: StartWorkerMessage,
             let calWeightedTaste = 0;
 
             for (const food of menu) {
-                calWeightedTaste = calWeightedTaste + (tastePreference.get(food.id) || 1) * food.cal;
+                calWeightedTaste = calWeightedTaste + (taste.get(food.id) || 1) * food.cal;
             }
 
             return calWeightedTaste / totalCal;
@@ -70,11 +70,10 @@ function testMenuWorker({ foods, filters, tastePreference }: StartWorkerMessage,
         };
     }
 
-    if (option === "random" || !option) {
+    if (calculateType === "random") {
         const bestMenus: IBestMenus | null = null;
 
         console.info("Starting random");
-        const startTime = Date.now();
         for (var i = 0; i <= 10000; i++) {
             try {
                 const menuSize = 10;
@@ -94,11 +93,11 @@ function testMenuWorker({ foods, filters, tastePreference }: StartWorkerMessage,
 
     function postBestMenuUpdate(bestMenus: IBestMenus) {
         self.postMessage({
-            op: "best_menu_update",
-            data: bestMenus,
-        } as IBestMenuMessage);
+            op: "best_menus_update",
+            result: bestMenus,
+        } as IBestMenusMessage);
     }
-    if (option === "definitive") {
+    if (calculateType === "definitive") {
         console.info("Starting definitive");
         calculateAllIterations(10);
     }
