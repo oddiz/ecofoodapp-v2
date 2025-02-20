@@ -16,7 +16,7 @@ export type Food = {
 
 export type FoodType = "Raw" | "Campfire" | "Bakery" | "Kitchen" | "Cast Iron Stove" | "Stove";
 
-export type IFilters = {
+export type ICalculateFilters = {
     maxBudget: number;
     maxCalories: number;
 };
@@ -24,12 +24,12 @@ export type IFoods = {
     selected: Food[];
     stomach: Food[];
 };
-export type ITastePref = Map<Food["id"], number>;
+export type ITastePref = { [foodId: string]: number };
 
 export type CalculateParameters = {
     foods: IFoods;
-    filters: IFilters;
-    taste: ITastePref;
+    filters: ICalculateFilters | null;
+    taste: Map<string, number>;
     menuSize: number;
     calculateType: "definitive" | "random";
 };

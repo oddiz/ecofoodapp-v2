@@ -5,7 +5,8 @@ type ICalculatorFilter = {
 
 import { Food } from "@/types/food";
 
-export function menuValid(menu: Food[], filters: ICalculatorFilter) {
+export function menuValid(menu: Food[], filters: ICalculatorFilter | null) {
+    if (!filters) return true;
     const totals = menu.reduce(
         (total, food) => {
             total.carb += food.carb;
@@ -21,6 +22,6 @@ export function menuValid(menu: Food[], filters: ICalculatorFilter) {
     return totals.price <= filters.maxBudget && totals.cal <= filters.maxCalories;
 }
 
-export const menuNotValid = (menu: Food[], filters: ICalculatorFilter) => {
+export const menuNotValid = (menu: Food[], filters: ICalculatorFilter | null) => {
     return !menuValid(menu, filters);
 };

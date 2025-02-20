@@ -1,19 +1,20 @@
-import { CalculateParameters, Food, IBestMenusMessage, IFilters, IFoods, ITastePref } from "@/types/food";
+import { CalculateParameters, Food, IBestMenusMessage, ICalculateFilters, IFoods, ITastePref } from "@/types/food";
 import getDefinitiveIterCount from "@/utils/getDefinitiveIterCount";
 import { WorkerController } from "./WorkerController";
 
 import EventEmitter from "eventemitter3";
-const ITERATION_LIMIT = 10 ** 8;
+import { getTaste } from "@/utils/getTaste";
+const ITERATION_LIMIT = 10 ** 6;
 
 export class Calculator extends EventEmitter {
     foods: IFoods;
-    filters: IFilters;
+    filters: ICalculateFilters | null;
     taste: ITastePref;
     maxMenuSize: number;
     workerControllers: WorkerController[];
 
     bestMenus: IBestMenusMessage["result"] | null;
-    constructor(foods: IFoods, filters: IFilters, taste: ITastePref, maxMenuSize: number) {
+    constructor(foods: IFoods, filters: ICalculateFilters | null, taste: ITastePref, maxMenuSize?: number) {
         super();
         this.foods = foods;
         this.filters = filters;
@@ -25,9 +26,10 @@ export class Calculator extends EventEmitter {
     }
 
     determineCalculateTypes() {
-        const result = new Array(9).fill(0).map((_, index) => {
-            const menuSize = index + 1;
+        const result = new Array(this.maxMenuSize).fill(0).map((_, index) => {
+            const menuSize: number = index + 1;
             const totalIterations = getDefinitiveIterCount(this.foods.selected.length, menuSize);
+            console.log(this.foods.selected.length, menuSize, totalIterations);
             const calculateType: CalculateParameters["calculateType"] =
                 totalIterations < ITERATION_LIMIT ? "definitive" : "random";
             return {
@@ -42,19 +44,30 @@ export class Calculator extends EventEmitter {
     spawnWorkers() {
         const calculateTypes = this.determineCalculateTypes();
         const workerControllers = calculateTypes.map(({ menuSize, calculateType }) => {
-            const worker = new Worker("./calculator.worker.ts", {
+            const worker = new Worker(new URL("../calculator.worker.ts", import.meta.url), {
                 type: "module",
             });
+            console.log("spawning worker");
             const workerController = new WorkerController(worker);
             workerController.start({
                 foods: this.foods,
                 filters: this.filters,
-                taste: this.taste,
+                taste: getTaste(),
                 menuSize: menuSize,
                 calculateType: calculateType,
             });
 
-            workerController.on("best_menus_update", () => {});
+            workerController.on("best_menus_update", () => {
+                this.refreshResults();
+            });
+            workerController.on("done", () => {
+                if (this.workerControllers.every((workerController) => workerController.state === "done")) {
+                    console.log("all done");
+                    for (const workerController of this.workerControllers) {
+                        workerController.terminate();
+                    }
+                }
+            });
             return workerController;
         });
         this.workerControllers = workerControllers;
@@ -63,11 +76,12 @@ export class Calculator extends EventEmitter {
 
     refreshResults() {
         for (const workerController of this.workerControllers) {
+            if (!workerController.bestMenus) {
+                continue;
+            }
             if (!this.bestMenus) {
                 this.bestMenus = workerController.bestMenus;
                 this.emit("best_menus_update", this.bestMenus);
-            } else if (!workerController.bestMenus) {
-                continue;
             } else {
                 const newBestSp = workerController.bestMenus.scholar?.result.sp;
                 const oldBestSp = this.bestMenus.scholar?.result.sp;
@@ -81,10 +95,17 @@ export class Calculator extends EventEmitter {
     }
 
     stop() {
-        for (const workerController of this.workerControllers) {
-            workerController.terminate();
-        }
+        try {
+            for (const workerController of this.workerControllers) {
+                workerController.terminate();
+            }
 
-        this.workerControllers = [];
+            this.workerControllers = [];
+        } catch (error) {}
+    }
+    start() {
+        this.stop();
+
+        this.spawnWorkers();
     }
 }

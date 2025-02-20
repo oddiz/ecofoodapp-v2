@@ -1,19 +1,20 @@
-import { ICalcWorkerMessage, IBestMenus, CalculateParameters } from "@/types/food";
+import { ICalcWorkerMessage, IBestMenus, CalculateParameters, StartWorkerMessage } from "@/types/food";
 import EventEmitter from "eventemitter3";
 export class WorkerController extends EventEmitter {
     worker: Worker;
     bestMenus: null | IBestMenus;
     calculateParameters: null | CalculateParameters;
 
-    status: "idle" | "calculating" | "done";
+    state: "idle" | "calculating" | "done";
 
     constructor(worker: Worker) {
         super();
         this.worker = worker;
 
-        this.status = "idle";
+        this.state = "idle";
         this.bestMenus = null;
-        this.worker.onmessage = this.processMessage;
+        this.worker.onmessage = (message) => this.processMessage(message);
+        this.processMessage.bind(this);
 
         this.calculateParameters = null;
     }
@@ -22,9 +23,8 @@ export class WorkerController extends EventEmitter {
             this.bestMenus = message.data.result;
             this.emit("best_menus_update");
         } else if (message.data.op === "calculation_end") {
-            this.status = "done";
+            this.state = "done";
             this.emit("done");
-            this.terminate();
         } else {
             console.error("Unknown message received from worker: ", message);
         }
@@ -34,16 +34,15 @@ export class WorkerController extends EventEmitter {
         this.worker.postMessage(message);
     }
     terminate() {
-        this.status = "idle";
+        this.state = "idle";
         this.worker.terminate();
     }
     start(calcParams: CalculateParameters) {
-        this.status = "calculating";
+        this.state = "calculating";
         this.calculateParameters = calcParams;
         const { foods, filters, taste, menuSize, calculateType } = calcParams;
 
         this.postMessage({
-            origin: "main",
             message: "start_worker",
             foods,
             filters,

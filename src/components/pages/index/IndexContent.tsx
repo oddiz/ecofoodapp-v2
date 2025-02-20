@@ -1,15 +1,16 @@
-import { Food, FoodType } from "@/types/food";
+import { Food, FoodType, IFoods } from "@/types/food";
 import { useNavigator } from "hooks/useNavigator";
 import { useSearch } from "hooks/useSearch";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { allFoods } from "@/data/foodData";
 import { CSSGrid, layout } from "react-stonecutter";
-import { FilterButton, FilterState, FoodTier } from "./FilterButton";
-import { ISortOption, SortButton } from "./SortButton";
+import { FilterButton, FilterState, FoodTier } from "./Header/FilterButton";
+import { ISortOption, SortButton } from "./Header/SortButton";
 import { FoodCard } from "./FoodCard";
 import { SelectedFoodsSection } from "./SelectedFoods";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import { CalculateSection } from "./Calculate/CalculateSection";
 
 const foods = Object.values(allFoods) as unknown as Food[];
 export type SortOptionId = "total_nutrients" | "name" | "calories" | "weight" | "carb" | "fat" | "pro" | "vit";
@@ -184,6 +185,15 @@ export const IndexContent = () => {
         selectedFoods,
     ]);
 
+    const getFoods = useCallback<() => IFoods>(() => {
+        const stomachFoods = JSON.parse(localStorage.getItem("stomachFoods") || "[]");
+        return { selected: selectedFoods, stomach: stomachFoods };
+    }, [selectedFoods]);
+
+    const getFilters = useCallback(() => {
+        return activeFilters;
+    }, [activeFilters]);
+
     const removeFood = (food: Food) => {
         setSelectedFoods((prev) => prev.filter((f) => f.id !== food.id));
     };
@@ -244,6 +254,9 @@ export const IndexContent = () => {
                     selectedFoods={selectedFoods}
                     removeFood={removeFood}
                 />
+            </div>
+            <div className="flex h-full min-w-[400px] flex-1 flex-col border-r-2 border-r-primarydark-200/40">
+                <CalculateSection getFoods={getFoods} />
             </div>
         </div>
     );
